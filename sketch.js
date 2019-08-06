@@ -10,11 +10,13 @@ function setup() {
   frameRate(50);
 
   // create sliders
-  widthSlider = createSlider(10, 500, 50, 10);
+  widthSlider = createSlider(10, 400, 50, 5);
   widthSlider.position(20, 20);
+  widthSlider.style('width', '250px');
 
-  speedSlider = createSlider(-20, 20, 2, 2);
+  speedSlider = createSlider(-20, 20, 2, 1);
   speedSlider.position(20, 50);
+  speedSlider.style('width', '250px');
 
   pauseButton = createButton('Pause');
   pauseButton.position(20, 80);
