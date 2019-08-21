@@ -69,8 +69,7 @@ function colorInput2Event() {
 }
 
 function draw() {
-  background(color1);
-  fill(color2);
+  background(255);
 
   let lineWidth = widthSlider.value();
   let speed = speedSlider.value();
@@ -81,7 +80,9 @@ function draw() {
     currentX = (currentX + speed) % (2 * lineWidth);
   }
   
-  if (!hidden) {
+  if (!hidden) {    
+    background(color1);
+    fill(color2);
     let x = currentX - lineWidth;
     while (x < width) {
       rect(x, 0, lineWidth, height);
