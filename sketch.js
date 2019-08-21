@@ -1,13 +1,17 @@
-let widthSlider, speedSlider, pauseButton, hideButton;
+let widthSlider, speedSlider;
+let pauseButton, hideButton;
+let colorInput1, colorInput2;
 let currentX = 0;
 let playing = true;
 let hidden = false;
+let color1 = "#333333";
+let color2 = "#111111";
 
 function setup() {
   // put setup code here
   createCanvas(windowWidth, windowHeight);
-  fill(0);
   frameRate(50);
+  noStroke();
 
   // create sliders
   widthSlider = createSlider(10, 400, 50, 5);
@@ -18,13 +22,22 @@ function setup() {
   speedSlider.position(20, 50);
   speedSlider.style('width', '250px');
 
+  colorInput1 = createInput('#333333');
+  colorInput1.input(colorInput1Event);
+  colorInput1.position(20, 80);
+  colorInput1.style('width', '250px');
+  colorInput2 = createInput('#111111');
+  colorInput2.input(colorInput2Event);
+  colorInput2.position(20, 110);
+  colorInput2.style('width', '250px');
+
   pauseButton = createButton('Pause');
-  pauseButton.position(20, 80);
+  pauseButton.position(20, 140);
   pauseButton.mousePressed(togglePlayPause);
   pauseButton.size(speedSlider.width, 25);
 
   hideButton = createButton('Hide');
-  hideButton.position(20, 110);
+  hideButton.position(20, 170);
   hideButton.mousePressed(toggleStripes);
   hideButton.size(speedSlider.width, 25);
 }
@@ -47,8 +60,17 @@ function toggleStripes() {
   }
 }
 
+function colorInput1Event() {
+  console.log(this.value());
+  color1 = this.value();
+}
+function colorInput2Event() {
+  color2 = this.value();
+}
+
 function draw() {
-  background(255, 255, 255);
+  background(color1);
+  fill(color2);
 
   let lineWidth = widthSlider.value();
   let speed = speedSlider.value();
