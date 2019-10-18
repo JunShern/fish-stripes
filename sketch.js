@@ -64,9 +64,15 @@ function togglePlayPause() {
       timer = setInterval(countdownCallback, 1000);
       timerStarted = true;
       pauseButton.html('Playing automatically in...');
+      // Hide stripes
+      hidden = true;
+      hideButton.html('Show');
     } else {
       // User clicks after timer started, means they want to stop
       resetTimer();
+      // Show stripes
+      hidden = false;
+      hideButton.html('Hide');
       // Set to playing, then stop it
       playing = true;
       togglePlayPause();
@@ -90,6 +96,9 @@ function countdownCallback() {
   setTimerValue(getTimerValue() - 1);
   if (getTimerValue() == 0) {
     resetTimer();
+    // Show stripes
+    hidden = false;
+    hideButton.html('Hide');
     // Set to not playing, then start it
     playing = false;
     togglePlayPause();
