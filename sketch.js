@@ -6,6 +6,8 @@ let playing = true;
 let hidden = false;
 let color1 = "#333333";
 let color2 = "#111111";
+let timer;
+let timerStarted = false;
 
 function setup() {
   // put setup code here
@@ -31,24 +33,79 @@ function setup() {
   colorInput2.position(20, 110);
   colorInput2.style('width', '250px');
 
+  hideButton = createButton('Hide');
+  hideButton.position(20, 140);
+  hideButton.mousePressed(toggleStripes);
+  hideButton.size(speedSlider.width, 25);
+
   pauseButton = createButton('Pause');
-  pauseButton.position(20, 140);
+  pauseButton.position(20, 200);
   pauseButton.mousePressed(togglePlayPause);
   pauseButton.size(speedSlider.width, 25);
 
-  hideButton = createButton('Hide');
-  hideButton.position(20, 170);
-  hideButton.mousePressed(toggleStripes);
-  hideButton.size(speedSlider.width, 25);
+  timerInput = createInput('0');
+  timerInput.input(timerInputEvent);
+  timerInput.position(20, 230);
+  timerInput.style('width', '250px');
 }
 
 function togglePlayPause() {
-  playing = !playing;
-  if (playing) {
-    pauseButton.html('Pause');
+  if (int(timerInput.value()) == 0) {
+    playing = !playing;
+    if (playing) {
+      pauseButton.html('Pause');
+    } else {
+      pauseButton.html('Play');
+    }  
+
   } else {
-    pauseButton.html('Play');
+    if (!timerStarted) {
+      // Start the timer
+      timer = setInterval(countdownCallback, 1000);
+      timerStarted = true;
+      pauseButton.html('Playing automatically in...');
+    } else {
+      // User clicks after timer started, means they want to stop
+      resetTimer();
+      // Set to playing, then stop it
+      playing = true;
+      togglePlayPause();
+    }
   }
+}
+
+// Timer offers functionality to start playback after user-defined number of seconds
+function getTimerValue() {
+  return int(timerInput.value());
+}
+function setTimerValue(val) {
+  timerInput.value(val);
+}
+function timerInputEvent() {
+  if (getTimerValue() > 0) {
+    pauseButton.html('Start timer');
+  }
+}
+function countdownCallback() {
+  setTimerValue(getTimerValue() - 1);
+  if (getTimerValue() == 0) {
+    resetTimer();
+    // Set to not playing, then start it
+    playing = false;
+    togglePlayPause();
+  }
+}
+function resetTimer() {
+  clearInterval(timer);
+  setTimerValue(0);
+  timerStarted = false;
+}
+
+function colorInput1Event() {
+  color1 = this.value();
+}
+function colorInput2Event() {
+  color2 = this.value();
 }
 
 function toggleStripes() {
@@ -58,14 +115,6 @@ function toggleStripes() {
   } else {
     hideButton.html('Hide');
   }
-}
-
-function colorInput1Event() {
-  console.log(this.value());
-  color1 = this.value();
-}
-function colorInput2Event() {
-  color2 = this.value();
 }
 
 function draw() {
@@ -79,7 +128,7 @@ function draw() {
   if (playing) {
     currentX = (currentX + speed) % (2 * lineWidth);
   }
-  
+
   if (!hidden) {
     background(color1);
     fill(color2);
@@ -87,6 +136,6 @@ function draw() {
     while (x < width) {
       rect(x, 0, lineWidth, height);
       x += 2 * lineWidth;
-    }  
+    }
   }
 }
