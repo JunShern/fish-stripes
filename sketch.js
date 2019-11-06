@@ -16,7 +16,7 @@ function setup() {
   noStroke();
 
   // create sliders
-  widthSlider = createSlider(10, 40, 50, 5);
+  widthSlider = createSlider(10, 40, 20, 1);
   widthSlider.position(20, 20);
   widthSlider.style('width', '250px');
 
