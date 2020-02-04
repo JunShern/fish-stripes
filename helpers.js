@@ -1,4 +1,4 @@
-let widthSlider, speedSlider;
+let widthSlider, speedSlider, opacitySlider;
 let reverseButton, pauseButton, hideButton;
 let colorInput1, colorInput2;
 let currentX = 0;
@@ -14,8 +14,10 @@ function draw() {
 
   let lineWidth = widthSlider.value();
   let speed = speedSlider.value();
+  let opacity = opacitySlider.value();
   text('Width: ' + lineWidth, widthSlider.x * 2 + widthSlider.width, 35);
   text('Speed: ' + speed, speedSlider.x * 2 + speedSlider.width, 65);
+  text('Opacity: ' + opacity, opacitySlider.x * 2 + opacitySlider.width, 185);
 
   if (playing) {
     currentX = (currentX + speed) % (2 * lineWidth);
@@ -23,7 +25,9 @@ function draw() {
 
   if (!hidden) {
     background(color1);
-    fill(color2);
+    let c = color(color2);
+    c.setAlpha(opacitySlider.value() * 255);
+    fill(c);
     let x = currentX - lineWidth;
     while (x < width) {
       rect(x, 0, lineWidth, height);

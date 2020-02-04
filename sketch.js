@@ -28,18 +28,22 @@ function setup() {
   colorInput2.position(20, 140);
   colorInput2.style('width', '250px');
 
+  opacitySlider = createSlider(0, 1, 1, 0.1);
+  opacitySlider.position(20, 170);
+  opacitySlider.style('width', '250px');
+
   hideButton = createButton('Hide');
-  hideButton.position(20, 170);
+  hideButton.position(20, 200);
   hideButton.mousePressed(toggleStripes);
   hideButton.size(speedSlider.width, 25);
 
   pauseButton = createButton('Pause');
-  pauseButton.position(20, 230);
+  pauseButton.position(20, 260);
   pauseButton.mousePressed(togglePlayPause);
   pauseButton.size(speedSlider.width, 25);
 
   timerInput = createInput('0');
   timerInput.input(timerInputEvent);
-  timerInput.position(20, 260);
+  timerInput.position(20, 290);
   timerInput.style('width', '250px');
 }
