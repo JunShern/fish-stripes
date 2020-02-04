@@ -43,26 +43,3 @@ function setup() {
   timerInput.position(20, 260);
   timerInput.style('width', '250px');
 }
-
-function draw() {
-  background(255);
-
-  let lineWidth = widthSlider.value();
-  let speed = speedSlider.value();
-  text('Width: ' + lineWidth, widthSlider.x * 2 + widthSlider.width, 35);
-  text('Speed: ' + speed, speedSlider.x * 2 + speedSlider.width, 65);
-
-  if (playing) {
-    currentX = (currentX + speed) % (2 * lineWidth);
-  }
-
-  if (!hidden) {
-    background(color1);
-    fill(color2);
-    let x = currentX - lineWidth;
-    while (x < width) {
-      rect(x, 0, lineWidth, height);
-      x += 2 * lineWidth;
-    }
-  }
-}
