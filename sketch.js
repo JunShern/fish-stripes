@@ -42,8 +42,9 @@ function setup() {
   pauseButton.mousePressed(togglePlayPause);
   pauseButton.size(speedSlider.width, 25);
 
-  timerInput = createInput('0');
-  timerInput.input(timerInputEvent);
-  timerInput.position(20, 290);
-  timerInput.style('width', '250px');
+  timerToStartInput = createInput('0');
+  timerToStartInput.position(20, 290);
+  timerToStartInput.style('width', '250px');
+  
+  mySetup();
 }

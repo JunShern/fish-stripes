@@ -6,8 +6,12 @@ let playing = true;
 let hidden = false;
 let color1 = "#333333";
 let color2 = "#111111";
-let timer;
-let timerStarted = false;
+let timerToStart;
+let timerToStartInput;
+
+function mySetup() {  
+  timerToStart = new Timer();
+}
 
 function draw() {
   background(255);
@@ -37,64 +41,32 @@ function draw() {
 }
 
 function togglePlayPause() {
-  if (int(timerInput.value()) == 0) {
-    playing = !playing;
-    if (playing) {
-      pauseButton.html('Pause');
-    } else {
-      pauseButton.html('Play');
-    }
-
+  if (playing || timerToStart.running) {
+    pauseStripes();
+    showStripes();
+    timerToStart.reset();
   } else {
-    if (!timerStarted) {
-      // Start the timer
-      timer = setInterval(countdownCallback, 1000);
-      timerStarted = true;
-      pauseButton.html('Playing automatically in...');
-      // Hide stripes
-      hidden = true;
-      hideButton.html('Show');
-    } else {
-      // User clicks after timer started, means they want to stop
-      resetTimer();
-      // Show stripes
-      hidden = false;
-      hideButton.html('Hide');
-      // Set to playing, then stop it
-      playing = true;
-      togglePlayPause();
-    }
+    pauseButton.html('Playing automatically in...');
+    timerToStart.start(
+      seconds = timerToStartInput.value(),
+      updateCallback = (count) => {
+        timerToStartInput.value(count);
+      },
+      endCallback = () => {
+        showStripes();
+        playStripes();
+      }
+    );
   }
 }
 
-// Timer offers functionality to start playback after user-defined number of seconds
-function getTimerValue() {
-  return int(timerInput.value());
+function playStripes() {
+  playing = true;
+  pauseButton.html('Pause');
 }
-function setTimerValue(val) {
-  timerInput.value(val);
-}
-function timerInputEvent() {
-  if (getTimerValue() > 0) {
-    pauseButton.html('Start timer');
-  }
-}
-function countdownCallback() {
-  setTimerValue(getTimerValue() - 1);
-  if (getTimerValue() == 0) {
-    resetTimer();
-    // Show stripes
-    hidden = false;
-    hideButton.html('Hide');
-    // Set to not playing, then start it
-    playing = false;
-    togglePlayPause();
-  }
-}
-function resetTimer() {
-  clearInterval(timer);
-  setTimerValue(0);
-  timerStarted = false;
+function pauseStripes() {
+  playing = false;
+  pauseButton.html('Play');
 }
 
 function colorInput1Event() {
@@ -105,12 +77,19 @@ function colorInput2Event() {
 }
 
 function toggleStripes() {
-  hidden = !hidden;
   if (hidden) {
-    hideButton.html('Show');
+    showStripes();
   } else {
-    hideButton.html('Hide');
+    hideStripes();
   }
+}
+function hideStripes() {
+  hidden = true;
+  hideButton.html('Show');
+}
+function showStripes() {
+  hidden = false;
+  hideButton.html('Hide');
 }
 
 function reverseDirection() {
