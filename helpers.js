@@ -10,10 +10,13 @@ let timerToStart;
 let timerToStartInput;
 let timerToStop;
 let timerToStopInput;
+let timerToReverse;
+let timerToReverseInput;
 
 function mySetup() {  
   timerToStart = new Timer();
   timerToStop = new Timer();
+  timerToReverse = new Timer();
 }
 
 function draw() {
@@ -22,9 +25,9 @@ function draw() {
   let lineWidth = widthSlider.value();
   let speed = speedSlider.value();
   let opacity = opacitySlider.value();
-  text('Width: ' + lineWidth, widthSlider.x * 2 + widthSlider.width, 35);
-  text('Speed: ' + speed, speedSlider.x * 2 + speedSlider.width, 65);
-  text('Opacity: ' + opacity, opacitySlider.x * 2 + opacitySlider.width, 185);
+  text('Width: ' + lineWidth, widthSlider.x * 2 + widthSlider.width, widthSlider.y + widthSlider.height/2);
+  text('Speed: ' + speed, speedSlider.x * 2 + speedSlider.width, speedSlider.y + speedSlider.height/2);
+  text('Opacity: ' + opacity, opacitySlider.x * 2 + opacitySlider.width, opacitySlider.y + opacitySlider.height/2);
 
   if (playing) {
     currentX = (currentX + speed) % (2 * lineWidth);
@@ -68,6 +71,9 @@ function togglePlayPause() {
         if (timerToStopInput.value() > 0) {
           togglePlayPause();
         }
+        if (timerToReverseInput.value() > 0) {
+          reverseDirection();
+        }
       }
     );
   }
@@ -106,5 +112,15 @@ function showStripes() {
 }
 
 function reverseDirection() {
-  speedSlider.value(-speedSlider.value());
+  reverseButton.html('Reversing automatically in...');
+  timerToReverse.start(
+    seconds = timerToReverseInput.value(),
+    updateCallback = (count) => {
+      timerToReverseInput.value(count);
+    },
+    endCallback = () => {
+      reverseButton.html('Reverse');
+      speedSlider.value(-speedSlider.value());
+    }
+  );
 }
