@@ -1,17 +1,12 @@
 let widthSlider, speedSlider, opacitySlider;
-let reverseButton, pauseButton, hideButton;
+let reverseButton, pauseButton, hideButton, automateButton;
 let colorInput1, colorInput2;
 let currentX = 0;
 let playing = true;
 let hidden = false;
 let color1 = "#333333";
 let color2 = "#111111";
-let timerToStart;
-let timerToStartInput;
-let timerToStop;
-let timerToStopInput;
-let timerToReverse;
-let timerToReverseInput;
+let commandPairs = [];
 
 function mySetup() {  
   timerToStart = new Timer();
@@ -46,36 +41,61 @@ function draw() {
   }
 }
 
-function togglePlayPause() {
-  if (playing || timerToStart.running) {
-    pauseButton.html('Pausing automatically in...');
-    timerToStop.start(
-      seconds = timerToStopInput.value(),
-      updateCallback = (count) => {
-        timerToStopInput.value(count);
-      },
-      endCallback = () => {
-        pauseStripes();
-      }
-    );
-  } else {
-    pauseButton.html('Playing automatically in...');
-    timerToStart.start(
-      seconds = timerToStartInput.value(),
-      updateCallback = (count) => {
-        timerToStartInput.value(count);
-      },
-      endCallback = () => {
-        playStripes();
-        // Check if want auto stop
-        if (timerToStopInput.value() > 0) {
-          togglePlayPause();
-        }
-        if (timerToReverseInput.value() > 0) {
+class CommandPair {
+  constructor(x, y, initialTimer=0, initialCommand='none', w=250) {
+    this.timerInput = createInput(`${initialTimer}`);
+    this.timerInput.position(x, y);
+    this.timerInput.style('width', `${w/2 - 10}px`);
+
+    this.commandInput = createSelect();
+    this.commandInput.position(x + w/2, y);
+    this.commandInput.style('width', `${w/2}px`);
+    this.commandInput.option('none');
+    this.commandInput.option('start');
+    this.commandInput.option('stop');
+    this.commandInput.option('reverse');
+    this.commandInput.selected(initialCommand);
+  }
+}
+function execute(commandIndex = 0) {
+  if (commandIndex >= commandPairs.length) {
+    console.log("Finished");
+    return;
+  }
+
+  let commandPair = commandPairs[commandIndex];
+  console.log(commandPair.timerInput.value(), commandPair.commandInput.value());
+
+  let timer = new Timer();
+  timer.start(
+    seconds = commandPair.timerInput.value(),
+    updateCallback = (count) => {
+      commandPair.timerInput.value(count);
+    },
+    endCallback = () => {
+      switch (commandPair.commandInput.value()) {
+        case 'start':
+          playStripes();
+          break;
+        case 'stop':
+          pauseStripes();
+          break;
+        case 'reverse':
           reverseDirection();
-        }
+          break;
       }
-    );
+      commandPair.commandInput.selected('none');
+      execute(commandIndex+1);
+    }
+  );
+
+}
+
+function togglePlayPause() {
+  if (playing) {
+    pauseStripes();
+  } else {
+    playStripes();
   }
 }
 
@@ -112,15 +132,5 @@ function showStripes() {
 }
 
 function reverseDirection() {
-  reverseButton.html('Reversing automatically in...');
-  timerToReverse.start(
-    seconds = timerToReverseInput.value(),
-    updateCallback = (count) => {
-      timerToReverseInput.value(count);
-    },
-    endCallback = () => {
-      reverseButton.html('Reverse');
-      speedSlider.value(-speedSlider.value());
-    }
-  );
+  speedSlider.value(-speedSlider.value());
 }

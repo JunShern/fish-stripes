@@ -28,31 +28,48 @@ function setup() {
   hideButton.mousePressed(toggleStripes);
   hideButton.size(widthSlider.width, 25);
 
-  pauseButton = createButton('Pause');
-  pauseButton.position(20, 260);
-  pauseButton.mousePressed(togglePlayPause);
-  pauseButton.size(widthSlider.width, 25);
-
-  timerToStartInput = createInput('0');
-  timerToStartInput.position(20, 290);
-  timerToStartInput.style('width', '120px');
-  
-  timerToStopInput = createInput('0');
-  timerToStopInput.position(145, 290);
-  timerToStopInput.style('width', '120px');
-
   speedSlider = createSlider(-20/15, 20/15, 1, 1/15);
-  speedSlider.position(20, 350);
+  speedSlider.position(20, 230);
   speedSlider.style('width', '250px');
 
   reverseButton = createButton('Reverse');
-  reverseButton.position(20, 380);
+  reverseButton.position(20, 260);
   reverseButton.mousePressed(reverseDirection);
   reverseButton.size(widthSlider.width, 25);
 
-  timerToReverseInput = createInput('0');
-  timerToReverseInput.position(20, 410);
-  timerToReverseInput.style('width', '245px');
+  pauseButton = createButton('Pause');
+  pauseButton.position(20, 320);
+  pauseButton.mousePressed(togglePlayPause);
+  pauseButton.size(widthSlider.width, 25);
+
+  automateButton = createButton('Automate');
+  automateButton.position(20, 380);
+  automateButton.mousePressed(execute);
+  automateButton.size(widthSlider.width, 25);
+
+  // 1 hour, start
+  // 20 seconds, stop
+  // 20 seconds, reverse
+  // 0, start
+  // 20 seconds, stop
+  let initCommands = [
+    [3600, 'start'],
+    [20, 'stop'],
+    [20, 'reverse'],
+    [0, 'start'],
+    [20, 'stop'],
+    [0, 'none'],
+    [0, 'none'],
+    [0, 'none'],
+    [0, 'none'],
+    [0, 'none'],
+  ];
+  for (let i=0; i<initCommands.length; i++) {
+    commandPairInput = new CommandPair(20, 410 + i*30,
+      initialTimer = initCommands[i][0],
+      initialCommand = initCommands[i][1]);
+    commandPairs.push(commandPairInput);
+  }
 
   mySetup();
 }
