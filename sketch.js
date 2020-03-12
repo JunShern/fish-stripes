@@ -41,7 +41,7 @@ function setup() {
   timerToStopInput.position(145, 290);
   timerToStopInput.style('width', '120px');
 
-  speedSlider = createSlider(-20, 20, 2, 1);
+  speedSlider = createSlider(-20/15, 20/15, 1, 1/15);
   speedSlider.position(20, 350);
   speedSlider.style('width', '250px');
 
