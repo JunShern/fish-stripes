@@ -15,16 +15,13 @@ class Timer {
                 updateCallback(this.counter);
                 if (this.counter <= 0) {
                     endCallback();
-                    this.reset();
+                    // Reset
+                    this.counter = 0;
+                    this.running = false;
+                    clearInterval(this.interval);
                 }
             }, 1000);    
         }
-    }
-
-    reset() {
-        this.counter = 0;
-        this.running = false;
-        clearInterval(this.interval);
     }
 
 }

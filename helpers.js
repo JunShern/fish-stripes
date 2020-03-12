@@ -8,9 +8,12 @@ let color1 = "#333333";
 let color2 = "#111111";
 let timerToStart;
 let timerToStartInput;
+let timerToStop;
+let timerToStopInput;
 
 function mySetup() {  
   timerToStart = new Timer();
+  timerToStop = new Timer();
 }
 
 function draw() {
@@ -42,9 +45,16 @@ function draw() {
 
 function togglePlayPause() {
   if (playing || timerToStart.running) {
-    pauseStripes();
-    showStripes();
-    timerToStart.reset();
+    pauseButton.html('Pausing automatically in...');
+    timerToStop.start(
+      seconds = timerToStopInput.value(),
+      updateCallback = (count) => {
+        timerToStopInput.value(count);
+      },
+      endCallback = () => {
+        pauseStripes();
+      }
+    );
   } else {
     pauseButton.html('Playing automatically in...');
     timerToStart.start(
@@ -53,8 +63,11 @@ function togglePlayPause() {
         timerToStartInput.value(count);
       },
       endCallback = () => {
-        showStripes();
         playStripes();
+        // Check if want auto stop
+        if (timerToStopInput.value() > 0) {
+          togglePlayPause();
+        }
       }
     );
   }

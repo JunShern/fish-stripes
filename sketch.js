@@ -44,7 +44,11 @@ function setup() {
 
   timerToStartInput = createInput('0');
   timerToStartInput.position(20, 290);
-  timerToStartInput.style('width', '250px');
+  timerToStartInput.style('width', '120px');
+  
+  timerToStopInput = createInput('0');
+  timerToStopInput.position(145, 290);
+  timerToStopInput.style('width', '120px');
   
   mySetup();
 }
