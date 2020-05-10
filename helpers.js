@@ -4,6 +4,7 @@ let colorInput1, colorInput2;
 let currentX = 0;
 let playing = true;
 let hidden = false;
+let verticalStripes = true;
 let color1 = "#333333";
 let color2 = "#111111";
 let commandPairs = [];
@@ -34,9 +35,16 @@ function draw() {
     c.setAlpha(opacitySlider.value() * 255);
     fill(c);
     let x = currentX - lineWidth;
-    while (x < width) {
-      rect(x, 0, lineWidth, height);
-      x += 2 * lineWidth;
+    if (verticalStripes) {
+      while (x < width) {
+        rect(x, 0, lineWidth, height);
+        x += 2 * lineWidth;
+      }
+    } else {
+      while (x < height) {
+        rect(0, x, width, lineWidth);
+        x += 2 * lineWidth;
+      }
     }
   }
 }
@@ -129,6 +137,11 @@ function hideStripes() {
 function showStripes() {
   hidden = false;
   hideButton.html('Hide');
+}
+
+function rotateStripes() {
+  verticalStripes = !verticalStripes;
+  currentX = 0;
 }
 
 function reverseDirection() {

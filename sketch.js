@@ -28,22 +28,27 @@ function setup() {
   hideButton.mousePressed(toggleStripes);
   hideButton.size(widthSlider.width, 25);
 
+  rotateButton = createButton('Rotate');
+  rotateButton.position(20, 200);
+  rotateButton.mousePressed(rotateStripes);
+  rotateButton.size(widthSlider.width, 25);
+
   speedSlider = createSlider(-20/15, 20/15, 1, 1/15);
-  speedSlider.position(20, 230);
+  speedSlider.position(20, 260);
   speedSlider.style('width', '250px');
 
   reverseButton = createButton('Reverse');
-  reverseButton.position(20, 260);
+  reverseButton.position(20, 290);
   reverseButton.mousePressed(reverseDirection);
   reverseButton.size(widthSlider.width, 25);
 
   pauseButton = createButton('Pause');
-  pauseButton.position(20, 320);
+  pauseButton.position(20, 350);
   pauseButton.mousePressed(togglePlayPause);
   pauseButton.size(widthSlider.width, 25);
 
   automateButton = createButton('Automate');
-  automateButton.position(20, 380);
+  automateButton.position(20, 410);
   automateButton.mousePressed(execute);
   automateButton.size(widthSlider.width, 25);
 
@@ -65,7 +70,7 @@ function setup() {
     [0, 'none'],
   ];
   for (let i=0; i<initCommands.length; i++) {
-    commandPairInput = new CommandPair(20, 410 + i*30,
+    commandPairInput = new CommandPair(20, 440 + i*30,
       initialTimer = initCommands[i][0],
       initialCommand = initCommands[i][1]);
     commandPairs.push(commandPairInput);
