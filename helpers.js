@@ -21,6 +21,7 @@ function draw() {
   let lineWidth = widthSlider.value();
   let speed = speedSlider.value();
   let opacity = opacitySlider.value();
+  fill(0);
   text('Width: ' + lineWidth, widthSlider.x * 2 + widthSlider.width, widthSlider.y + widthSlider.height/2);
   text('Speed: ' + speed, speedSlider.x * 2 + speedSlider.width, speedSlider.y + speedSlider.height/2);
   text('Opacity: ' + opacity, opacitySlider.x * 2 + opacitySlider.width, opacitySlider.y + opacitySlider.height/2);
