@@ -51,19 +51,23 @@ function draw() {
 }
 
 class CommandPair {
-  constructor(x, y, initialTimer=0, initialCommand='none', w=250) {
+  constructor(x, y, initialTimer=0, initialCommand='none', initialWidth=10, w=250) {
     this.timerInput = createInput(`${initialTimer}`);
     this.timerInput.position(x, y);
-    this.timerInput.style('width', `${w/2 - 10}px`);
+    this.timerInput.style('width', `${w/3 - 10}px`);
 
     this.commandInput = createSelect();
-    this.commandInput.position(x + w/2, y);
-    this.commandInput.style('width', `${w/2}px`);
+    this.commandInput.position(x + w/3, y);
+    this.commandInput.style('width', `${w/3 - 5}px`);
     this.commandInput.option('none');
     this.commandInput.option('start');
     this.commandInput.option('stop');
     this.commandInput.option('reverse');
     this.commandInput.selected(initialCommand);
+
+    this.widthInput = createInput(`${initialWidth}`);
+    this.widthInput.position(x + 2*w/3, y);
+    this.widthInput.style('width', `${w/3 - 10}px`);
   }
 }
 function execute(commandIndex = 0) {
@@ -82,6 +86,7 @@ function execute(commandIndex = 0) {
       commandPair.timerInput.value(count);
     },
     endCallback = () => {
+      widthSlider.value(commandPair.widthInput.value());
       switch (commandPair.commandInput.value()) {
         case 'start':
           playStripes();
