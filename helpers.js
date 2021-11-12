@@ -5,8 +5,8 @@ let currentX = 0;
 let playing = true;
 let hidden = false;
 let verticalStripes = true;
-let color1 = "#333333";
-let color2 = "#111111";
+let color1 = "#FFFFFF";
+let color2 = "#000000";
 let commandPairs = [];
 
 function mySetup() {  
