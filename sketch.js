@@ -68,10 +68,7 @@ For example:
   textArea = createElement('textarea');
   textArea.position(20, 440);
   textArea.size(widthSlider.width, 100);
-  textArea.value(`5,stop,10
-5,start,10
-5,reverse,20
-5,reverse,30`);
+  textArea.value(defaultInstruction);
 
   autoStatus = createDiv("Awaiting instructions.");
   autoStatus.style('background', '#fff');
@@ -81,3 +78,52 @@ For example:
 
   mySetup();
 }
+
+defaultInstruction = `5,start,10
+15,stop,10
+0,reverse,10
+5,start,10
+15,stop,10
+0,reverse,10
+5,start,9
+15,stop,9
+0,reverse,9
+5,start,9
+15,stop,9
+0,reverse,9
+5,start,8
+15,stop,8
+0,reverse,8
+5,start,8
+15,stop,8
+0,reverse,8
+5,start,7
+15,stop,7
+0,reverse,7
+5,start,7
+15,stop,7
+0,reverse,7
+5,start,6
+15,stop,6
+0,reverse,6
+5,start,6
+15,stop,6
+0,reverse,6
+5,start,5
+15,stop,5
+0,reverse,5
+5,start,5
+15,stop,5
+0,reverse,5
+5,start,4
+15,stop,4
+0,reverse,4
+5,start,4
+15,stop,4
+0,reverse,4
+5,start,3
+15,stop,3
+0,reverse,3
+5,start,3
+15,stop,3
+0,reverse,3`;
