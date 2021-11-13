@@ -7,7 +7,10 @@ let hidden = false;
 let verticalStripes = true;
 let color1 = "#FFFFFF";
 let color2 = "#000000";
-let commandPairs = [];
+let autoInstructions = [];
+let validCommands = ['none', 'start', 'stop', 'reverse'];
+let instructionCounter = 1;
+let totalInstructions;
 
 function mySetup() {  
   timerToStart = new Timer();
@@ -50,44 +53,68 @@ function draw() {
   }
 }
 
-class CommandPair {
-  constructor(x, y, initialTimer=0, initialCommand='none', initialWidth=10, w=250) {
-    this.timerInput = createInput(`${initialTimer}`);
-    this.timerInput.position(x, y);
-    this.timerInput.style('width', `${w/3 - 10}px`);
-
-    this.commandInput = createSelect();
-    this.commandInput.position(x + w/3, y);
-    this.commandInput.style('width', `${w/3 - 5}px`);
-    this.commandInput.option('none');
-    this.commandInput.option('start');
-    this.commandInput.option('stop');
-    this.commandInput.option('reverse');
-    this.commandInput.selected(initialCommand);
-
-    this.widthInput = createInput(`${initialWidth}`);
-    this.widthInput.position(x + 2*w/3, y);
-    this.widthInput.style('width', `${w/3 - 10}px`);
+class Instruction {
+  constructor(timer, command, width) {
+    this.timer = timer;
+    this.command = command;
+    this.width = width;
   }
 }
-function execute(commandIndex = 0) {
-  if (commandIndex >= commandPairs.length) {
-    console.log("Finished");
+
+function startAutomation(commandIndex = 0) {
+  fullCommandString = textArea.value();
+  console.log(fullCommandString);
+  console.log("Parsing...");
+  commandStrings = fullCommandString.split(/\r?\n/);
+  for (let i=0; i<commandStrings.length; i++) {
+    commandString = commandStrings[i];
+    command = commandString.split(',').map(x => x.trim());
+    console.log(i+1, command);
+
+    // Input validation
+    if (isNaN(Number(command[0])))
+    {
+      alert(`Error on line ${i+1} "${commandString}":\n${command[0]} is not a valid number`);
+    }
+    if (!validCommands.includes(command[1]))
+    {
+      alert(`Error on line ${i+1} "${commandString}":\n${command[1]} is not a valid command. Should be one of: ${validCommands}`);
+    }
+    if (isNaN(Number(command[2])))
+    {
+      alert(`Error on line ${i+1} "${commandString}":\n${command[2]} is not a valid number`);
+    }
+
+    instruction = new Instruction(Number(command[0]), command[1], Number(command[2]));
+    autoInstructions.push(instruction);
+  }
+  instructionCounter = 1;
+  totalInstructions = autoInstructions.length;
+  executeNextInstruction();
+}
+
+function executeNextInstruction() {
+  if (autoInstructions.length <= 0)
+  {
+    console.log("Done!");
+    autoStatus.html("Done!");
     return;
   }
 
-  let commandPair = commandPairs[commandIndex];
-  console.log(commandPair.timerInput.value(), commandPair.commandInput.value());
+  nextInstruction = autoInstructions.shift();
+  autoStatus.html(`(${instructionCounter} / ${totalInstructions})<br>${nextInstruction.timer}s before executing "${nextInstruction.command}" with width=${nextInstruction.width}.`);
+
+  console.log("Executing", nextInstruction)
 
   let timer = new Timer();
   timer.start(
-    seconds = commandPair.timerInput.value(),
+    seconds = nextInstruction.timer,
     updateCallback = (count) => {
-      commandPair.timerInput.value(count);
+      autoStatus.html(`(${instructionCounter} / ${totalInstructions})<br>${count}s before executing "${nextInstruction.command}" with width=${nextInstruction.width}.`);
     },
     endCallback = () => {
-      widthSlider.value(commandPair.widthInput.value());
-      switch (commandPair.commandInput.value()) {
+      widthSlider.value(nextInstruction.width);
+      switch (nextInstruction.command) {
         case 'start':
           playStripes();
           break;
@@ -97,12 +124,11 @@ function execute(commandIndex = 0) {
         case 'reverse':
           reverseDirection();
           break;
-      }
-      commandPair.commandInput.selected('none');
-      execute(commandIndex+1);
+        }
+      instructionCounter++;
+      executeNextInstruction();
     }
   );
-
 }
 
 function togglePlayPause() {

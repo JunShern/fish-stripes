@@ -49,32 +49,35 @@ function setup() {
 
   automateButton = createButton('Automate');
   automateButton.position(20, 410);
-  automateButton.mousePressed(execute);
-  automateButton.size(widthSlider.width, 25);
+  automateButton.mousePressed(startAutomation);
+  automateButton.size(widthSlider.width * 0.8, 25);
+  helpButton = createButton('?');
+  helpButton.position(20 + widthSlider.width * 0.8, 410);
+  helpButton.size(widthSlider.width * 0.2, 25);
+  helpButton.mousePressed(x => 
+    alert(`To use automation, enter lines in the box:
+WAIT_SECS,{none/start/reverse/stop},STRIPE_WIDTH
 
-  // 1 hour, start
-  // 20 seconds, stop
-  // 20 seconds, reverse
-  // 0, start
-  // 20 seconds, stop
-  let initCommands = [
-    [3600, 'start'],
-    [20, 'stop'],
-    [20, 'reverse'],
-    [0, 'start'],
-    [20, 'stop'],
-    [0, 'none'],
-    [0, 'none'],
-    [0, 'none'],
-    [0, 'none'],
-    [0, 'none'],
-  ];
-  for (let i=0; i<initCommands.length; i++) {
-    commandPairInput = new CommandPair(20, 440 + i*30,
-      initialTimer = initCommands[i][0],
-      initialCommand = initCommands[i][1]);
-    commandPairs.push(commandPairInput);
-  }
+For example:
+5,stop,10
+5,start,10
+5,reverse,20
+5,reverse,30`)
+    );
+
+  textArea = createElement('textarea');
+  textArea.position(20, 440);
+  textArea.size(widthSlider.width, 100);
+  textArea.value(`5,stop,10
+5,start,10
+5,reverse,20
+5,reverse,30`);
+
+  autoStatus = createDiv("Awaiting instructions.");
+  autoStatus.style('background', '#fff');
+  autoStatus.style('padding', '5px');
+  autoStatus.position(20, 550);
+  autoStatus.size(widthSlider.width, 60);
 
   mySetup();
 }
